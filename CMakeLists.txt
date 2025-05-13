@@ -1,47 +1,46 @@
 cmake_minimum_required(VERSION 3.27)
 project(ymir)
 
+### Project Variables ###
+############################################################
+set(YMIR_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(YMIR_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+set(YMIR_INCLUDES 
+  ${YMIR_INCLUDE_DIR} 
+)
+############################################################
+
+### CMake Variables ###
+############################################################
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_BUILD_TYPE Debug)
+############################################################
 
-find_library(glfw glfw REQUIRED)
-
-set(YMIR_LIBS_PATH ${CMAKE_SOURCE_DIR}/libs)
-set(YMIR_CLI_SOURCES
-  src/cli_main.cpp
-  src/project.cpp
+### Project Sources ###
+############################################################
+set(YMIR_SOURCES 
+  ${YMIR_SRC_DIR}/main.cpp
+  ${YMIR_SRC_DIR}/ymir_project.cpp
 )
+############################################################
 
-set(YMIR_GUI_SOURCES
-  src/gui_main.cpp
-  src/project.cpp
-  src/gui.cpp
-)
+### Final Build ###
+############################################################
+add_executable(${PROJECT_NAME} ${YMIR_SOURCES})
+############################################################
 
-set(LIBS_SOURCES
-  ${YMIR_LIBS_PATH}/src/imgui/imgui.cpp 
-  ${YMIR_LIBS_PATH}/src/imgui/imgui_demo.cpp 
-  ${YMIR_LIBS_PATH}/src/imgui/imgui_draw.cpp 
-  ${YMIR_LIBS_PATH}/src/imgui/imgui_tables.cpp 
-  ${YMIR_LIBS_PATH}/src/imgui/imgui_widgets.cpp 
-  
-  ${YMIR_LIBS_PATH}/src/imgui/imgui_impl_glfw.cpp 
-  ${YMIR_LIBS_PATH}/src/imgui/imgui_impl_opengl3.cpp 
+### Linking ###
+############################################################
+target_include_directories(${PROJECT_NAME} PUBLIC BEFORE ${YMIR_INCLUDES})
+############################################################
 
-  ${YMIR_LIBS_PATH}/src/glad/gl.c
-)
+### Compiling Options ###
+############################################################
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+############################################################
 
-# CLI executable
-add_executable(ymir ${YMIR_CLI_SOURCES})
-
-# GUI executable
-add_executable(ymir-gui ${YMIR_GUI_SOURCES} ${LIBS_SOURCES})
-target_include_directories(ymir-gui BEFORE PUBLIC ${YMIR_LIBS_PATH}/include)
-target_link_libraries(ymir-gui PRIVATE ${glfw})
-target_compile_definitions(ymir-gui PUBLIC GLFW_INCLUDE_NONE)
-target_compile_features(ymir-gui PUBLIC cxx_std_20)
-
-file(COPY assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-
-# Will install the project to be able to be used as a CLI command
-install(TARGETS ${PROJECT_NAME} ymir-gui DESTINATION bin)
+### Library Install ###
+############################################################
+install(TARGETS ${PROJECT_NAME} ymir 
+        DESTINATION bin)
+############################################################
