@@ -16,7 +16,6 @@ enum ArgumentType {
   ARGUMENT_SRC_DIR,
   ARGUMENT_INCLUDE_DIR,
   ARGUMENT_DEPS_DIR,
-  ARGUMENT_ADDITIONAL_DIR,
   
   ARGUMENT_HAS_GIT,
   
@@ -92,13 +91,12 @@ bool args_parse(ymir::ProjectDesc* out_desc, int argc, char** argv) {
     
     {ARGUMENT_STANDARD_VERSION, "--standard",    "-std", "Define the standard of the language (by default, this is 20)"},
     {ARGUMENT_PROJECT_TYPE,     "--type",        "-t",   "Can be either CONSOLE_APP, GUI_APP, or LIBRARY"},
-    {ARGUMENT_DEFINITIONS,      "--definitions", "-d",   "A semi-colon seperated list of the project's definitions"},
-    {ARGUMENT_COMPILER,         "--flags", "-f",         "A semi-colon seperated list of the project's compiler flags"},
+    {ARGUMENT_DEFINITIONS,      "--definitions", "-d",   "List all of the project's definitions inside quotes"},
+    {ARGUMENT_COMPILER,         "--flags", "-f",         "List all of the project's compiler flags inside quotes"},
     
     {ARGUMENT_SRC_DIR,        "--src-dir",     "-sd", "Define the name of the source directory (by default, this is \'src\')"},
     {ARGUMENT_INCLUDE_DIR,    "--include-dir", "-id", "Define the name of the include directory (by default, this is \'src\')"},
     {ARGUMENT_DEPS_DIR,       "--deps-dir",    "-dd", "Define the name of the dependencies directory (by default, this is \'libs\')"},
-    {ARGUMENT_ADDITIONAL_DIR, "--extra-dirs",  "-ed", "A semi-colon seperated list of any additional directories needed"},
     
     {ARGUMENT_HAS_GIT, "--has-git",  "-g", "Create both a .gitignore and a .gitattributes file if set (by default, this is unset)"},
     
@@ -130,9 +128,6 @@ bool args_parse(ymir::ProjectDesc* out_desc, int argc, char** argv) {
     }
     else if(args_is_equal(args[ARGUMENT_DEPS_DIR], argv[i])) {
       out_desc->deps_dir = argv[++i];
-    }
-    else if(args_is_equal(args[ARGUMENT_ADDITIONAL_DIR], argv[i])) {
-      out_desc->additional_dirs = argv[++i];
     }
     else if(args_is_equal(args[ARGUMENT_HAS_GIT], argv[i])) {
       out_desc->has_git = true;

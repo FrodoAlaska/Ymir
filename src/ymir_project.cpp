@@ -60,7 +60,7 @@ bool create_directories(const ProjectDesc& desc) {
   printf("[YMIR-TRACE]: Creating the main directory...\n");
 
   // Create the source directory
-  if(!std::filesystem::create_directory(desc.full_path)) {
+  if(!std::filesystem::create_directory(desc.full_path / desc.src_dir)) {
     printf("[YMIR-ERROR]: Failed to create soruce directory at \'%s\'\n", (desc.full_path / desc.src_dir).string().c_str());
     return false;
   }
@@ -68,7 +68,7 @@ bool create_directories(const ProjectDesc& desc) {
 
   // Create the include directory (only if it has a different name)
   if(desc.src_dir != desc.include_dir) {
-    if(!std::filesystem::create_directory(desc.full_path)) {
+    if(!std::filesystem::create_directory(desc.full_path / desc.src_dir)) {
       printf("[YMIR-ERROR]: Failed to create include directory at \'%s\'\n", (desc.full_path / desc.include_dir).string().c_str());
       return false;
     }
@@ -76,29 +76,11 @@ bool create_directories(const ProjectDesc& desc) {
   }
   
   // Create the dependencies directory
-  if(!std::filesystem::create_directory(desc.full_path)) {
+  if(!std::filesystem::create_directory(desc.full_path / desc.deps_dir)) {
     printf("[YMIR-ERROR]: Failed to create dependencies directory at \'%s\'\n", (desc.full_path / desc.deps_dir).string().c_str());
     return false;
   }
   printf("[YMIR-TRACE]: Creating the dependencies directory...\n");
-
-  // Create any additional directories
-  std::string dir = "";
-  for(const char ch : desc.additional_dirs.string()) {
-    if(ch != ';' || ch != ' ') {
-      dir += ch;
-      continue;
-    }
-
-    std::filesystem::path path = desc.full_path / std::filesystem::path(dir);
-    if(!std::filesystem::create_directory(path)) {
-      printf("[YMIR-ERROR]: Failed to create directory at \'%s\'\n", path.string().c_str());
-      return false;
-    }
-    printf("[YMIR-TRACE]: Creating the \'%s\' directory...\n", dir.c_str());
-
-    dir = "";
-  }
 
   return true;
 }
@@ -135,9 +117,9 @@ void create_cmake_entries(const ProjectDesc& desc) {
   cmake_file << "### Project variables ###\n";
   cmake_file << "############################################################\n";
   cmake_file << "# @NOTE: Add any project-specific variables here\n";
-  cmake_file << "set(PROJECT_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/" << desc.src_dir << '\n';
-  cmake_file << "set(PROJECT_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/" << desc.include_dir << '\n';
-  cmake_file << "set(PROJECT_LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/" << desc.deps_dir << "\n\n";
+  cmake_file << "set(PROJECT_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/" << desc.src_dir.string() << ")\n";
+  cmake_file << "set(PROJECT_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/" << desc.include_dir.string() << ")\n";
+  cmake_file << "set(PROJECT_LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/" << desc.deps_dir.string() << ")\n\n";
   cmake_file << "set(PROJECT_BUILD_FLAGS " << desc.compiler_flags << ")\n";
   cmake_file << "set(PROJECT_BUILD_DEFINITIONS " << desc.definitions << ")\n";
   cmake_file << "############################################################\n\n";

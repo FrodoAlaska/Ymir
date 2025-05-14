@@ -33,7 +33,6 @@ struct ProjectDesc {
   std::filesystem::path src_dir     = "src";
   std::filesystem::path include_dir = "src"; 
   std::filesystem::path deps_dir    = "libs";
-  std::filesystem::path additional_dirs;
 
   bool has_git = false;
   
