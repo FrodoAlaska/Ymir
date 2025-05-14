@@ -105,7 +105,7 @@ However, for a `LIBRARY` project, the following will be used:
 
 ```cmake
 # 'SHARED' is used by default but it can be changed
-add_library(${PROJECT_NAME} STATIC ${PROJECT_SOURCES} ${PROJECT_HEADERS})
+add_library(${PROJECT_NAME} SHARED ${PROJECT_SOURCES} ${PROJECT_HEADERS})
 ```
 The `GUI_APP` project does not differ _too_ much from a regular `CONSOLE_APP`. However, on both Windows and MacOS, if you wish to disable the console completely (which is quite likely in a GUI application), the `add_executable` CMake command needs to include either the `WIN32` or the `MACOSX_BUNDLE` flags respectfully. Besides that, GUI applications on Windows have a unique entry point.
 
