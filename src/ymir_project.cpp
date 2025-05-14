@@ -53,22 +53,22 @@ namespace ymir { // Start of ymir
 
 bool create_directories(const ProjectDesc& desc) {
   // Create the main directory
-  if(!std::filesystem::create_directory(desc.full_path)) {
+  if(!std::filesystem::create_directories(desc.full_path)) {
     printf("[YMIR-ERROR]: Failed to create the main project directory at \'%s\'\n", desc.full_path.c_str());
     return false;
   }
   printf("[YMIR-TRACE]: Creating the main directory...\n");
 
   // Create the source directory
-  if(!std::filesystem::create_directory(desc.full_path / desc.src_dir)) {
+  if(!std::filesystem::create_directories(desc.full_path / desc.src_dir)) {
     printf("[YMIR-ERROR]: Failed to create soruce directory at \'%s\'\n", (desc.full_path / desc.src_dir).string().c_str());
     return false;
   }
   printf("[YMIR-TRACE]: Creating the source directory...\n");
 
   // Create the include directory (only if it has a different name)
-  if(desc.src_dir != desc.include_dir) {
-    if(!std::filesystem::create_directory(desc.full_path / desc.src_dir)) {
+  if(desc.include_dir != desc.src_dir) {
+    if(!std::filesystem::create_directories(desc.full_path / desc.include_dir)) {
       printf("[YMIR-ERROR]: Failed to create include directory at \'%s\'\n", (desc.full_path / desc.include_dir).string().c_str());
       return false;
     }
@@ -76,7 +76,7 @@ bool create_directories(const ProjectDesc& desc) {
   }
   
   // Create the dependencies directory
-  if(!std::filesystem::create_directory(desc.full_path / desc.deps_dir)) {
+  if(!std::filesystem::create_directories(desc.full_path / desc.deps_dir)) {
     printf("[YMIR-ERROR]: Failed to create dependencies directory at \'%s\'\n", (desc.full_path / desc.deps_dir).string().c_str());
     return false;
   }

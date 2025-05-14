@@ -1,78 +1,159 @@
-# What is Ymir?
-Ymir is a C++ project generator much like what Visual Studio has. However, unlike VS, Ymir is more Linux-based and is much more simple and lightweight. Or, rather, less robust in its features compared to VS. You can use the CLI version or the GUI version of Ymir, both providing the same functionality but just in a different visual aspect. Ymir is by no means a replacement for managing your C++ projects. Far from it. It will only help you in the initial stage of starting a new C++ project. It will help you set up the necessary folders and files to *immediately* start programming in God's language. You don't have to go fiddling around trying to create multiple folders, name them, and all that nonsense. Just tell Ymir where to dump all of your emotional thoughts and rage (the main directory) and it will do its job by creating a build folder, a source folder, a dependencies folder, and any other extra directories you specified.  
+# Ymir 
 
-Ymir will also create a simple 'main.cpp' file and a *very* simple 'CMakeLists.txt' file. For now, Ymir only supports CMake as your project's build system. However, in the future, Ymir will include other build systems like Make or PreMake. Ymir will also create a 'build_and_run.sh' shell script to easily build and compile your program. You can tell Ymir to not generate scripts as it will do it by default. Do keep in mind that the shell script Ymir will generate will have to be converted (or chmod'd) by you in order to be executed.
+Ymir is a lightweight and flexible C++ project generator for both Windows and Linux. 
 
-Ymir has many settings you can set to create the *exact* project you want. For example, with Ymir, you can specify the C++ version, whether the project is a program (an executable) or a library, add compiler flags easily, add definitions, and more. 
+Ymir is __not__ a C++ build system. 
+It is __not__ a replacement for CMake or any other build system. In fact, Ymir uses CMake under the hood. 
 
-# Build
-Currently, Ymir only supports Linux. Why? Because I'm a neckbeard. If you have any complaints, please insert them into the I-don't-give-a-fuck machine. Thank you. 
+Ymir is only a useful tool to generate all the necessary files and directories (specified by you) in order to start developing a C++ project faster. 
 
-Jokes aside, the process of building Ymir is straightforward. However, it does differ from version to version. For example, Ymir-CLI does not have any external dependencies and will build the fastest. On the other hand, Ymir-GUI does use ImGui and GLFW. Now, the only dependency you have to worry about is GLFW. ImGui is internally included and built by Ymir. But you can use whatever version you like.
+Ymir will: 
+    - *Create* a main directory for the project.
+    - *Generate* a top-level `CMakeLists.txt` file with all the required options set. The file is commented and quite robust although somewhat simple. 
+    - *Create* the main directories where all your source files will live as well as a directory for all your third-party libraries. 
+    - *Generate* a default `main.cpp` file for convenience 
+    - *Generate* a `.gitignore` and a `.gitattributes` if Git is enabled.
 
-There is one process that both versions do share, however, and that is cloning the project.  
+Besides that, Ymir can set a few configurations for the initial state of your project. Configurations such as the C++ standard, any initial project definitions, compiler flags, and so on.
 
-~~~
-git clone https://github.com/MohamedAG2002/Ymir.git
-cd Ymir
-~~~
 
-Sadly, that is where the similarities end. Below you'll find the build instructions for both versions.
+## Build Instructions 
 
-## CLI: How To Build? 
-Building Ymir-CLI is very simple. First, you'll have to navigate to wherever you cloned Ymir and then run the commands below:
+Like most C++ projects, Ymir uses CMake as its build system. The following commands will compile Ymir and produce a `ymir` executable. 
 
-~~~
-mkdir build
-cd build 
-cmake ..
-make 
-~~~
+```bash
+mkdir build && cd build 
+cmake .. 
+make
+```
 
-After successfully building Ymir, you can use just use the executable that was just produced. However, you can also run the command below to make Ymir a global CLI command so that you can use it in any directory. 
+Ymir does not have any dependencies at all. It only uses `C++17` features and that's it. The compilation process should be quite simple and fast. 
 
-~~~
+Afterwards, you can execute the `ymir` command from the build directory or install it system-wide like so: 
+
+```bash
 sudo make install
-~~~
+```
 
-## GUI: How To Build? 
-As for the GUI version of Ymir, there's a little bit of work on your end. Specifically, you need to get GLFW as Ymir depends on it to create a window and such. Ymir also use GLAD and ImGui but you don't have to worry about those since Ymir handles them for you. Once you've installed GLFW and put it somewhere CMake can find, you only have to build Ymir and cross your fingers that nothing happens. If you get any linking errors make sure that you linked GLFW correctly and that CMake found it in the first place. However, if there are any issues then you can contact me directly on here or anywhere else I'm available. The same commands for compiling the CLI version should work for the GUI version as well.
+That command will only work for Linux, however. For Windows, you can place Ymir anywhere but you _must_ add it to your environment variables in order to use it from anywhere.
 
-# Uses
-As mentioned before, Ymir has two versions you can use: the CLI version and the GUI version. Both offer the same functionality but both differ in visual terms. You can use either. Whatever suits you best. However, do keep in mind that the GUI version is naturally more bloated since it has to deal with GLFW, ImGui, and OpenGL. So if you do prefer something more lightweight but a little bit harder to work with then use the CLI version. But if you don't mind being a little heavy then use the GUI version. Below are examples of both versions.
+## Usage
 
-## CLI: How to Use? 
-In order to create a project with Ymir-CLI, there are two *very* essential and *very* important values you need to pass. The path of the project and the name of the project. Any other commands that Ymir provides are optional and Ymir will just use the default values for these optional commands if none of them are given. Do note that with both versions, Ymir will create a root directory with the name of the project in the provided path. So you don't need to do something like `ymir ~/C++Projects/NewProject NewProject`. Ymir will go to that path and create a new directory for you. No need to create one on your own. Another thing to note, Ymir will keep the header files (.h/.hpp) of the project in the same directory as the source files (.cpp). If you don't like that, you can use one of those optional commands mentioned above to specify a specific folder for the header files.
+Finally, now you can use Ymir in all its glory. You should pass the `--help` flag to Ymir to get a better idea of what can be done. 
 
-### List of all CLI commands
+```
+ymir --help
+```
 
-~~~
- --src     -S = Folder to hold all of the .cpp files (default = src)"
- --header  -H = Folder to hold all of  the .h/.hpp files (default = src)
- --deps    -L = Folder to hold all external dependencies (default = libs)
- --scripts    = Should this project have utility scripts? (0 = yes, 1 = no)
- --cpp     -V = C++ version this project will use (default = 17)
- --flags   -F = Extra compiler flags (NOTE: put the falgs inside \"\")
- --defs    -D = Extra project definitions (NOTE: put the defs inside \"\")
- --type    -T = Type of this project (PROJ_TYPE_EXEC or PROJE_TYPE_LIB; default = PROJ_TYPE_EXEC)
-~~~
+Will produce: 
 
-## CLI: Example
+```
+### ### Ymir: A C++ project generator ### ###
 
-~~~
-# A very basic use case 
-ymir /home/ymir-dev/Dev/C++ new_project
-~~~
+[Usage]: ymir [options] --new <project_name>
+        [--new, -n]          = The name of the new project
+        [--standard, -std]   = Define the standard of the language (by default, this is 20)
+        [--type, -t]         = Can be either CONSOLE_APP, GUI_APP, or LIBRARY
+        [--definitions, -d]  = List all of the project's definitions inside quotes
+        [--flags, -f]        = List all of the project's compiler flags inside quotes
+        [--src-dir, -sd]     = Define the name of the source directory (by default, this is 'src')
+        [--include-dir, -id] = Define the name of the include directory (by default, this is 'src')
+        [--deps-dir, -dd]    = Define the name of the dependencies directory (by default, this is 'libs')
+        [--has-git, -g]      = Create both a .gitignore and a .gitattributes file if set (by default, this is unset)
+        [--help, -h]         = Show this help screen
 
-~~~
-# Specifying some extra commands 
-ymir /home/ymir-dev/Dev/C++ new_project --cpp 20 --type PROJ_TYPE_LIB --flags "-Wall -lm" --defs "GLFW_INCLUDE_NONE OTHER_DEF"
-~~~
+### ### Ymir: A C++ project generator ### ###
+```
 
-## GUI: How to Use? 
-The GUI version is the simplest to use. After you have compiled and built Ymir-GUI successfully, you should be able to run the `ymir-gui` executable produced and a window should popup with a very simple UI. That's all the UI Ymir offers at the moment. Perhaps there could be extra functionality in the future. But, for now, that is all that is available. Below you can see a picture of the UI.
+The most important flag is the `--new` flag since it will start the process of creating a C++ project with the given name. 
 
-## GUI: Example  
-![GUI-Screenshot](assets/gui_screenshot.png)
+```
+ymir --new "NewCPPProject"
+```
 
-As you can see, the UI is very simple and does not really have any hidden functionality. What you see is what you get. However, please make sure that you input the correct path and make sure to read the instructions given on the tooltips if you are ever confused. If you hover over any of the options/inputs you should see a note telling you what to input and what remarks you should know about.
+With only this command, you'll have a new project directory with the name `NewCPPProject` with the following contents:
+
+```
+- NewCPPProject/
+    - libs/ 
+    - src/
+        main.cpp
+    - CMakeLists.txt
+```
+
+Although it is somewhat minimal, it is just enough to get started. However, if you wish to change or add a few configurations, you can use the various flags Ymir offers. 
+
+For example, the `--standard` flag or its alias `-std` will set the C++ language standard. 
+
+```
+ymir -std 20 --new "NewCPPProject"
+```
+
+You can also change the _type_ of the C++ project. A library is different from a console application, and those are different still from a GUI application. Using the `--type` (or `-t`) flag will give you the flexibility of choosing a specific project type. 
+
+```
+ymir -std 20 -t CONSOLE_APP --new "NewConsoleApp"
+```
+
+The `--type` flag accepts either `CONSOLE_APP`, `GUI_APP`, or `LIBRARY`. The difference between these types under the hood is the way the `CMakeLists.txt` and the default `main.cpp` files will be configured. For example, for the `CONSOLE_APP` project type, the CMake file will have the usual: 
+
+```cmake
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+```
+
+However, for a `LIBRARY` project, the following will be used: 
+
+```cmake
+# 'SHARED' is used by default but it can be changed
+add_library(${PROJECT_NAME} STATIC ${PROJECT_SOURCES} ${PROJECT_HEADERS})
+```
+The `GUI_APP` project does not differ _too_ much from a regular `CONSOLE_APP`. However, on both Windows and MacOS, if you wish to disable the console completely (which is quite likely in a GUI application), the `add_executable` CMake command needs to include either the `WIN32` or the `MACOSX_BUNDLE` flags respectfully. Besides that, GUI applications on Windows have a unique entry point.
+
+```c++
+#include <windows.h>
+
+int WINAPI WinMain(HINSTANCE inst, HINSTANCE prev_inst, LPSTR cmd_line, int cmd_show) {
+  return 0;
+}
+```
+
+Moving on, we can also add some configurations to the C++ project by using both the `--definitions` (or `-d`) and the `--flags` (or `-f`) flags. 
+
+```
+ymir -std 20 -t GUI_APP -d "GLFW_INCLUDE_NONE" -f "-lm -w" --new "NewGameProject"
+```
+
+Just make sure to include multiple flags or definitions in the same string on the command line.
+
+By default, Ymir keeps both the translation units (`.cpp` or `.c`) and the header files in the same directory--`src`. But that can easily be changed. 
+
+```
+ymir -std 20 -t LIBRARY --src-dir "src" --include-dir "include/library_name" -n "NewLibrary"
+```
+
+Ymir also generates a directory for third-party libraries. And, like the source and include directories, it can also be changed to your liking. 
+
+```
+ymir -std 20 -t LIBRARY --deps-dir "thirdparty" -n "NewLibrary"
+```
+
+Ymir can also generate two Git files if the `--has-git` (or the alias `-g`) flag is set. Mainly, Ymir will generate a `.gitignore` and a `.gitattributes` file in the main directory.
+
+```
+ymir -std 20 -t LIBRARY --src-dir "src" --include-dir "include/library_name" --deps-dir "thirdparty" -n "NewLibrary" -g
+```
+
+With the previous command, the newly generated project directory should look something like this: 
+
+```
+- NewLibrary/ 
+    - include/ 
+    - src/
+        main.cpp
+    - thirdparty/ 
+    - CMakeLists
+    - .gitignore
+    - .gitattributes
+```
+
+If the `cmake ..` command is run on the main directory, a new binary will be produced with no issues (hopefully).
