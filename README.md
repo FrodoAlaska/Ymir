@@ -151,7 +151,7 @@ With the previous command, the newly generated project directory should look som
     - src/
         main.cpp
     - thirdparty/ 
-    - CMakeLists
+    - CMakeLists.txt
     - .gitignore
     - .gitattributes
 ```
