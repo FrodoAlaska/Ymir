@@ -8,7 +8,6 @@ It is __not__ a replacement for CMake or any other build system. In fact, Ymir u
 Ymir is only a useful tool to generate all the necessary files and directories (specified by you) in order to start developing a C++ project faster. 
 
 Ymir will
-
     - *Create* a main directory for the project.
     - *Generate* a top-level `CMakeLists.txt` file with all the required options set. The file is commented and quite robust although somewhat simple. 
     - *Create* the main directories where all your source files will live as well as a directory for all your third-party libraries. 
